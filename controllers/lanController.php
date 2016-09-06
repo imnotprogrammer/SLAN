@@ -5,12 +5,7 @@ use frame\Controller;
 class lanController extends Controller{
     public function indexAction()
     {
-        $addr1 = 'youyilunmingyue@163.com';
-        $addr3 = 'lanshiqingfeng@163.com';
-        $addr2 = 'lanyuguo@foxmail.com';
-        $addr4 = '18349299452@163.com';
-        $addr5 = 'lan@netmoon.cn';
-        $this->assign('title', '欢迎你使用蓝雨果框架');
+        $this->assign('title', '欢迎你使用SLan框架');
         $this->display('index.php');
 
         $db = new \frame\db\DBActive();
