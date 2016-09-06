@@ -2,6 +2,9 @@
 use frame\conf;
 use frame\db\Db;
 use frame\Controller;
+/**
+ * 测试实例
+ */
 class lanController extends Controller{
     public function indexAction()
     {
