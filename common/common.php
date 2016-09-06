@@ -125,7 +125,4 @@ function getRandArr($start, $end, $size){
     }
     return $return;
 }
-
-
-
 ?>
