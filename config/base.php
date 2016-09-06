@@ -1,0 +1,14 @@
+<?php
+    return array(
+        'web_host' => 'localhost',
+        'extension' => array(
+            'PHPMailer' => array(   //扩展名，即目录名
+                'loadfile' => array('PHPMailerAutoload.php')//需要加载的文件
+            ),
+            'PHPExcel' => array(
+                'loadfile' => array('PHPExcel/Shared/String.php','PHPExcel.php','PHPExcel/Writer/Excel2007.php')
+            )
+        ),
+    );
+
+?>
