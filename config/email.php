@@ -1,4 +1,8 @@
 <?php
+/**
+ * 发送邮件的配置信息
+  */
+ 
     return array(
         'EmailServer'     =>   '',                                     //邮件服务器 例如smtp.163.com
         'FromUserAddr'    =>   '',                                     //发件人的邮箱地址，例如：lanshiqingfeng@163.com
