@@ -2,13 +2,14 @@
 namespace frame;
 use Exception;
    class app{
-
+        public static $exten;
        /**
         * app constructor.
         */
        public function __construct(){
 	       require_once(WEB_ROOT.'/frame/smarty/libs/Smarty.class.php');
            require_once(WEB_ROOT.'/common/common.php');
+
        }
 
        /**
@@ -101,13 +102,22 @@ use Exception;
        public static function getclientip(){
            return $_SERVER['REMOTE_ADDR'] ;
        }
-
+       public static function exten(){
+           self::$exten = new app();
+           return self::$exten;
+       }
        /**
         * @return mixed
         */
        public static function getserverip(){
            return $_SERVER['SERVER_ADDR'];
        }
-
+       public function __get($name)
+       {
+           // TODO: Implement __get() method.
+           self::$exten=$this;
+           $class = 'frame\\'.$name;
+           return new $class;
+       }
    }
 ?>
