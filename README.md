@@ -1,5 +1,4 @@
 # SLAN
-<<<<<<< Updated upstream
 
 本项目是一个php框架
 
@@ -8,5 +7,3 @@
 其中主要任务是为此框架构建各种有用的插件。
 
 而添加目录位于frame下
-=======
->>>>>>> Stashed changes
