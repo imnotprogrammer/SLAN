@@ -12,23 +12,25 @@ namespace frame;
           * 定于smarty，利用smarty调用模板引擎
           */
          protected $smarty;
-
+         public $smarty_status;
          /**
           *配置smarty的相关信息
           */
          public function __construct(){
-             require_once(WEB_ROOT."/frame/smarty/libs/Smarty.class.php");
-			$this->smarty = new \smarty();
-			$this->smarty->setTemplateDir(WEB_ROOT.'/views')
-							  ->setCompileDir(WEB_ROOT.'/frame/smarty/template_c')
-							  ->setPluginsDir(WEB_ROOT.'/frame/smarty/plugins')
-							  ->setCacheDir(WEB_ROOT.'/frame/smarty/cache')
-							  ->setConfigDir(WEB_ROOT.'/frame/smarty/config');
-			$this->smarty->caching = false;
-			$this->smarty->cache_lifetime = 60*60*24;
-			$this->smarty->left_delimiter = '{';
-			$this->smarty->right_delimiter = '}';	
-					 
+			$this->smarty_status = conf::getOne("base","smartyEngine");
+			if($this->smarty_status=="on"){
+				require_once(WEB_ROOT."/frame/smarty/libs/Smarty.class.php");
+				$this->smarty = new \smarty();
+				$this->smarty->setTemplateDir(WEB_ROOT.'/views')
+								  ->setCompileDir(WEB_ROOT.'/frame/smarty/template_c')
+								  ->setPluginsDir(WEB_ROOT.'/frame/smarty/plugins')
+								  ->setCacheDir(WEB_ROOT.'/frame/smarty/cache')
+								  ->setConfigDir(WEB_ROOT.'/frame/smarty/config');
+				$this->smarty->caching = false;
+				$this->smarty->cache_lifetime = 60*60*24;
+				$this->smarty->left_delimiter = '{';
+				$this->smarty->right_delimiter = '}';	
+			}		 
          }
 
          /**
@@ -39,7 +41,13 @@ namespace frame;
              if($view==null){
                  throw new \Exception('你没有选择模板文件');
              }
-             $this->smarty->display($view);
+			 try{
+				$this->smarty->display($view); 
+			 }catch(Exception $e){
+				 throw new \Exception("smarty模板配置没有开启，或者没有加载");
+				 exit;
+			 }
+             
              if($arr) {
                  $this->smarty->assign('value',$arr);
              }
@@ -50,6 +58,10 @@ namespace frame;
           * @param null $parm
           */
          public function assign($data,$parm = null){
+			 if($this->smarty_status=="off"){
+				 throw new \Exception("smarty配置选项没有开启");
+				 exit();
+			 }
              if(is_array($data) && $parm == null){
                  foreach($data as $key=>$val){
                      $this->smarty->assign($key,$val);

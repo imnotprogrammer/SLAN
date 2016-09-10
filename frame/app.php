@@ -17,7 +17,6 @@ use Exception;
         * 路由方法
         */
        public static function run(){
-
            if(true == DEBUG){
                ini_set('display_error','on');
            }else{
@@ -47,43 +46,41 @@ use Exception;
            }else{
                throw new Exception('此种路由方式不存在：'.$routeway);
            }
-			 $arr = array();
 			 $arr = explode('/',$pathstr);
 			 $path = WEB_ROOT.'/controllers';
 			 
 			 if(count($arr)>=3){
 				 foreach($arr as $key=>$val){
-					 $path.='/'.$val;
+					 $path.='/'.ucfirst($val);
 					 if(count($arr)-intval($key)==2){
 						 if(!file_exists($path)){
                              throw new Exception('没有发现该文件：'.$arr[1].'.php');
 						 }
-						 $controller = $val;
-						
+						 $controller = ucfirst($val);
 					 }elseif(count($arr)-intval($key)==1){
-						 $action = $val.'Action';  
+						 $action = strtolower($val).'Action';  
 						
 						 if(!is_dir($path)){
                              throw new Exception('没有发现该目录：'.$arr[0]);
-
 						 }
 					 }
 				 }			 
 			 }elseif(count($arr)==2){
-				 $path =$path. '/'.$arr[0];
+				 $path =$path. '/'.ucfirst($arr[0]);
 
 				 if(!file_exists($path.'Controller.php')){
 					 throw new Exception('没有发现该文件：'.$arr[0].'.php');
 				 }
 				
-				 $controller = $arr[0];
-				 $action     = $arr[1].'Action';
+				 $controller = ucfirst($arr[0]);
+				 $action     = strtolower($arr[1]).'Action';
 				
 			 }else{
 				
 			 }
 			require_once($path.'Controller.php');
-			$controller = $controller.'Controller';	
+			$controller = $controller.'Controller';
+
 			$con = new $controller;
 			$con->$action();
 	   }
@@ -115,7 +112,7 @@ use Exception;
        public function __get($name)
        {
            // TODO: Implement __get() method.
-           self::$exten=$this;
+           //self::$exten=$this;
            $class = 'frame\\'.$name;
            return new $class;
        }

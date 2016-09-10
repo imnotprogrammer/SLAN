@@ -27,10 +27,9 @@ namespace frame;
          */
         public static function getOne($conf,$confindex =''){
             $path = WEB_ROOT . '/config/' . $conf . '.php';
-
             if (file_exists($path)) {
-                $conf = include_once($path);
-                return $conf[$confindex];
+                $confs = include($path);				//print_r($confs);echo $confs[$confindex];
+                return $confs[$confindex];
             } else {
                 throw new \Exception('没有发现配置文件：' . $conf . '.php');
             }

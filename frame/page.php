@@ -9,23 +9,28 @@ namespace frame;
 
     class Page{
         /**
-         * @var 共可以分多少页
+         * @var
+         * 共可以分多少页
          */
         public $pagecount;
         /**
-         * @var 一页显示多少条数据;
+         * @var
+         * 一页显示多少条数据;
          */
         public $pagesize;
         /**
-         * @var int 当前页码
+         * @var int
+         * 当前页码
          */
         public $page = 1;
         /**
-         * @var 总共有多条数据
+         * @var
+         * 总共有多条数据
          */
         public $sum;
         /**
-         * @var 分页的风格类型
+         * @var
+         * 分页的风格类型
          */
         public $styletype;
         /**
@@ -55,9 +60,19 @@ namespace frame;
             $this->page = $page;
             echo $this->page;
         }
-
+        public function getUrl(){
+			 $_url = $_SERVER["REQUEST_URI"];  
+			 $_par = parse_url($_url);  
+			 if (isset($_par['query'])) {  
+					parse_str($_par['query'],$_query);  
+					unset($_query['page']);  
+					$_url = $_par['path'].'?'.http_build_query($_query);  
+			 }  
+			 return $_url;  
+		}
         /**
-         * @return float|共可以分多少页|int
+         * @return float|
+         * 共可以分多少页|int
          * 计算可以分多少页
          */
         public function getPageCount(){
@@ -98,23 +113,23 @@ namespace frame;
            }else {
                $this->html .= '<div class="page">';
                if ($this->page == 1) {
-                   $this->html .= '<a javascript:void(0)>上一页</a>';
+                   $this->html .= '<a href="javascript:void(0)">上一页</a>';
                } else {
-                   $this->html .= '<a href ="' . $_SERVER['PHP_SELF'] . '?page = ' . ($this->page - 1) . '">上一页</a>';
+                   $this->html .= '<a href ="' . $this->getUrl() . '?page = ' . ($this->page - 1) . '">上一页</a>';
                }
                for ($i = 0; $i < $this->pagecount; $i++) {
                    $temp = $i + 1;
                    if ($this->page == $temp) {
-                       $this->html .= '<a class="checked" href = "' . $_SERVER['PHP_SELF'] . '?page=' . ($i + 1) . '" >' . ($i + 1) . '</a>';
+                       $this->html .= '<a class="checked" href = "' . $this->getUrl() . '?page=' . ($i + 1) . '" >' . ($i + 1) . '</a>';
                    } else {
-                       $this->html .= '<a  href = "' . $_SERVER['PHP_SELF'] . '?page=' . ($i + 1) . '" >' . ($i + 1) . '</a>';
+                       $this->html .= '<a  href = "' . $this->getUrl() . '?page=' . ($i + 1) . '" >' . ($i + 1) . '</a>';
                    }
                }
                $this->html .= '<span>共' . $this->pagecount . '页</span>';
                if ($this->page == $this->pagecount) {
-                   $this->html .= '<a avascript:void(0)>下一页</a>';
+                   $this->html .= '<a href="javascript:void(0)">下一页</a>';
                } else {
-                   $this->html .= '<a href ="' . $_SERVER['PHP_SELF'] . '?page=' . ($this->page + 1) . '">下一页</a>';
+                   $this->html .= '<a href ="' . $this->getUrl() . '?page=' . ($this->page + 1) . '">下一页</a>';
                }
                $this->html .= '</div>';
                return $this->html;
@@ -131,6 +146,7 @@ namespace frame;
                     return $this->getPage();
                 }
             }
+            return false;
         }
         public function dealStyle(){
 
