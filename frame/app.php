@@ -51,12 +51,12 @@ use Exception;
 			 
 			 if(count($arr)>=3){
 				 foreach($arr as $key=>$val){
-					 $path.='/'.ucfirst($val);
+					 $path.='/'.ucfirst(strtolower($arr[0]));
 					 if(count($arr)-intval($key)==2){
 						 if(!file_exists($path)){
                              throw new Exception('没有发现该文件：'.$arr[1].'.php');
 						 }
-						 $controller = ucfirst($val);
+						 $controller = ucfirst(strtolower($arr[0]));
 					 }elseif(count($arr)-intval($key)==1){
 						 $action = strtolower($val).'Action';  
 						
@@ -66,13 +66,13 @@ use Exception;
 					 }
 				 }			 
 			 }elseif(count($arr)==2){
-				 $path =$path. '/'.ucfirst($arr[0]);
+				 $path =$path. '/'.ucfirst(strtolower($arr[0]));
 
 				 if(!file_exists($path.'Controller.php')){
 					 throw new Exception('没有发现该文件：'.$arr[0].'.php');
 				 }
 				
-				 $controller = ucfirst($arr[0]);
+				 $controller = ucfirst(strtolower($arr[0]));
 				 $action     = strtolower($arr[1]).'Action';
 				
 			 }else{
