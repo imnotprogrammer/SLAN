@@ -11,5 +11,5 @@
     require(WEB_ROOT.'/frame/Lan.php'); //自动加载和初始化
     require(WEB_ROOT.'/common/common.php');
     \frame\app::run();
-
+      echo phpinfo();
 ?>
