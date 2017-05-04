@@ -30,14 +30,16 @@
 	  text-align:center;
 	  letter-spacing:4px;
 	  font-weight:bold;
+	  font-size:18px;
   }
 
 </style> 
+<>
 <div id="slan"> 
 <div id="circle_bot">  
     </div>  
     <div id="circle_mid">  
-	<strong>SLAN</strong>
+	<strong>SLAN 2.0</strong><br>
     </div>  
 </div>
 <div id="info_display">{$infomation}</div>
