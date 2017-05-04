@@ -17,7 +17,12 @@
 				'right_delimiter'=>'}'
 			)
 		),   
-        'extension' => array(),	
+        'extension' => [
+		      'memcache'=>[
+			     'class'=>'spread\tools\memcache',
+				 'useMemcached'=>false
+			  ]
+		],	
     );
 
 ?>

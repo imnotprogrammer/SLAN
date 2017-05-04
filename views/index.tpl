@@ -34,12 +34,10 @@
   }
 
 </style> 
-<>
 <div id="slan"> 
-<div id="circle_bot">  
-    </div>  
+    <div id="circle_bot"></div>  
     <div id="circle_mid">  
-	<strong>SLAN 2.0</strong><br>
+	   <strong>SLAN 2.0</strong><br>
     </div>  
 </div>
 <div id="info_display">{$infomation}</div>

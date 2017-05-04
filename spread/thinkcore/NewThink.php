@@ -17,12 +17,15 @@ class NewThink{
 		date_default_timezone_set($confs['timezone']);
         $includefile = array();
         foreach ((array)$confs['extension'] as $key => $val) {
-		    $dirpath = WEB_ROOT . '/spread/' . $key;
-		    foreach ((array)$val['loadfile'] as $loadfile){
+			$path = '/spread/' . $key;
+			$dirpath = isset($val['class'])?str_replace('\\','/', $val['class']):$path;
+		    //$dirpath = WEB_ROOT . '/spread/' . $key;
+		   /*  foreach ((array)$val['loadfile'] as $loadfile){
 				$includefile[] = $dirpath . '/' . $loadfile;				
-			}
+			} */
+			$includefile[] = WEB_ROOT .'/'. $dirpath . '.php';
 			$dirpath = null;
-        }         
+        }   
 	    foreach($includefile as $file){
 			include $file;
 		}
