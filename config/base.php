@@ -4,7 +4,7 @@
         'timezone' => 'GMT',
 		//'ifsessionshare' =>array(''),
 		'smarty' => array(
-		    'status' => false , //smarty模板引擎是否启动，true表示启动，false表示关闭，默认为on开启
+		    'status' => true , //smarty模板引擎是否启动，true表示启动，false表示关闭，默认为on开启
 			'setconf' =>array(
 			    'templatedir' => WEB_ROOT.'/views',
 			    'compiledir' => WEB_ROOT.'/spread/smarty/template_c',

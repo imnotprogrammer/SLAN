@@ -54,6 +54,10 @@ class NewThink{
 		return true;
 	}
 } 
+try{
 	NewThink::Register();
-	NewThink::init();
+	NewThink::init();	
+}catch(\Execption $e){
+	echo $e->getMessage();
+}
 ?>
