@@ -7,16 +7,19 @@
  *
  */
     use spread\thinkcore\conf;
-    //ini_set('display_error','on');
+		
     ini_set('date.timezone','Etc/GMT-8');
-    //date_default_timezone_set('Etc/GMT-8');
-	//session_start();
-    defined("WEB_ROOT") or define("WEB_ROOT",__DIR__);   
-    define('DEBUG',true);    
+    defined("WEB_ROOT") or define("WEB_ROOT", __DIR__);   
+    defined('DEBUG') or define('DEBUG', true);    
     require(WEB_ROOT.'/spread/thinkcore/NewThink.php'); //自动加载和初始化
     require(WEB_ROOT.'/common/common.php');
     require(WEB_ROOT.'/config/define.php');
-	spread\thinkcore\app::run(); 
+	try{
+		spread\thinkcore\app::run(); 
+	}catch(Exception $e){
+		$e->getMessage();
+	}
+	
 ?>
 
 
