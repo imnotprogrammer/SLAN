@@ -13,6 +13,7 @@ class NewThink{
      * @return bool
      */
 	public static function init(){
+		
 		$confs = conf::getConf('base');
 		date_default_timezone_set($confs['timezone']);
         $includefile = array();
@@ -29,6 +30,7 @@ class NewThink{
 	    foreach($includefile as $file){
 			include $file;
 		}
+		
 	}
 	/*
 	 * 自动加载调用方法

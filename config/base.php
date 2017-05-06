@@ -18,10 +18,7 @@
 			)
 		),   
         'extension' => [
-		      'memcache'=>[
-			     'class'=>'spread\tools\memcache',
-				 'useMemcached'=>false
-			  ]
+		      
 		],	
     );
 
