@@ -51,8 +51,7 @@ class NewThink{
 		}
 		$file = WEB_ROOT.'/'.str_replace('\\','/',$class).'.php';		
 		if(file_exists($file)){
-			include $file;
-			
+			include $file;			
 		}else{			
 			return false;
 		}
