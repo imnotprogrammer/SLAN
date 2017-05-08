@@ -1,36 +1,23 @@
 <?php
 namespace spread\thinkcore;
-use Exception;
-   class app{
-        public static $exten;
-       /**
-        * app constructor.
-        */
-       public function __construct(){
-	       require_once(WEB_ROOT.'/spread/smarty/libs/Smarty.class.php');
-           require_once(WEB_ROOT.'/common/common.php');
-
-       }
-
-       /**
-        * @throws Exception
-        * 璺敱鏂规硶
-        */
-       public static function run(){
-           if(true == DEBUG){
-               ini_set('display_error','On');
-           }else{
-               ini_set('display_error','Off');
-           }
-           $conf = conf::getConf('route');
-           $routeway = $conf['defaultroute'];
+class App{
+    public static $config;
+    public function __construct($config){
+        self::$config = $config;
+    }
+	public function run(){
+		    
+		   $routinfo = self::$config['route'];
+  
+           $routeway = $routinfo['routeway'];
+		   $routedefaultpath = $routinfo['routedefaultpath'];
 
            if($routeway == '/'){
                if(isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] != '/') {
                    $pathRequst = $_SERVER['PATH_INFO'];
                    $pathstr = trim($pathRequst,'/');
                }else{
-                   $pathstr = $conf['defaultController'] . '/' . $conf['defaultAction'];
+                   $pathstr = $routedefaultpath;
                }
               
            }elseif($routeway == 'r') {
@@ -41,10 +28,10 @@ use Exception;
                } else if (isset($_GET['rounte'])) {
                    $pathstr = $_GET['rounte'];
                } else {
-                   $pathstr = $conf['defaultController'] . '/' . $conf['defaultAction'];
+                   $pathstr = $routedefaultpath;
                }
            }else{
-               throw new Exception('姝ょ璺敱鏂瑰紡涓嶅瓨鍦細'.$routeway);
+               throw new Exception('此种路由方式不存在：'.$routeway);
            }
 			 $arr = explode('/',$pathstr);
 			 $path = WEB_ROOT.'/controllers';
@@ -54,21 +41,21 @@ use Exception;
 					 $path.='/'.ucfirst(strtolower($arr[0]));
 					 if(count($arr)-intval($key)==2){
 						 if(!file_exists($path)){
-                             throw new Exception('娌℃湁鍙戠幇璇ユ枃浠讹細'.$arr[1].'.php');
+                             throw new Exception('没有发现该文件：'.$arr[1].'.php');
 						 }
 						 $controller = ucfirst(strtolower($arr[0]));
 					 }elseif(count($arr)-intval($key)==1){
 						 $action = strtolower($val).'Action';  
 						
 						 if(!is_dir($path)){
-                             throw new Exception('娌℃湁鍙戠幇璇ョ洰褰曪細'.$arr[0]);
+                             throw new Exception('没有发现该目录：'.$arr[0]);
 						 }
 					 }
 				 }			 
 			 }elseif(count($arr)==2){
 				 $path =$path. '/'.ucfirst(strtolower($arr[0]));
 				 if(!file_exists($path.'Controller.php')){
-					 throw new Exception('娌℃湁鍙戠幇璇ユ枃浠讹細'.$arr[0].'.php');
+					 throw new Exception('没有发现该文件：'.$arr[0].'.php');
 				 }
 				 $controller = ucfirst(strtolower($arr[0]));
 				 $action     = strtolower($arr[1]).'Action';
@@ -76,49 +63,43 @@ use Exception;
 			 }else{
 				
 			 }
-			require_once($path.'Controller.php');
 			$controller = $controller.'Controller';
-
-			$con = new $controller;
-			$con->$action();
-	   }
-
-       /**
-        * @return mixed
-        *
-        */
-	   public static function gethost(){
-	       return conf::getOne('base','web_host');
-       }
-
-       /**
-        * @return mixed
-        */
-       public static function getclientip(){
-
-			if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) $ip = getenv("HTTP_CLIENT_IP"); 
-			else if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown")) $ip = getenv("HTTP_X_FORWARDED_FOR"); 
-			else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown")) $ip = getenv("REMOTE_ADDR"); 
-			else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown")) $ip = $_SERVER['REMOTE_ADDR']; 
-			else $ip = "unknown"; 
-			return ($ip); 
-       }
-       public static function exten(){
-           self::$exten = new app();
-           return self::$exten;
-       }
-       /**
-        * @return mixed
-        */
-       public static function getserverip(){
-           return $_SERVER['SERVER_ADDR'];
-       }
-       public function __get($name)
-       {
-           // TODO: Implement __get() method.
-           //self::$exten=$this;
-           $class = 'spread\\'.$name;
-           return new $class;
-       }
-   }
-?>
+			$class  = new \ReflectionClass('controllers\\'.$controller);
+			$class->newInstance()->$action();
+	}
+    public function __get($name){
+        if(isset(self::$config[$name])){
+			
+            $objectConfig = self::$config[$name];
+            if (isset($objectConfig['class'])){
+               $objectName = $objectConfig['class'];
+            } else{
+               $objectName = $name;
+            }            
+            $class  = new \ReflectionClass($objectName); // 建立 $object类的反射类 
+            $properties = $class->getProperties(\ReflectionProperty::IS_PUBLIC);
+            $public_properties = array();
+            foreach ($properties as $t){
+                if ($t->isPublic()){
+                    $public_properties[] = $t->getName();
+                }
+            }
+			$object = $class->newInstance(); 
+            foreach ($objectConfig as $key=>$val){
+				if ($class->hasMethod('__set') && $key != 'class'){
+					$object->$key = $val;
+				} else{
+				   if (property_exists($objectConfig['class'], $key) && in_array($key, $public_properties)){
+					  $object->$key = $val;
+				   }
+				}
+            }
+            return $object; 
+        }else{
+			throw new \Exception('not found class '.$name);
+		}
+    }
+    public function __set($name,$value){
+        $this->$name = $value;
+    }
+}

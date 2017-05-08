@@ -732,7 +732,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      *
      * @var string[]
      */
-    private $accessMap = array('template_dir' => 'TemplateDir', 'config_dir' => 'ConfigDir',
+    public $accessMap = array('template_dir' => 'TemplateDir', 'config_dir' => 'ConfigDir',
                                'plugins_dir' => 'PluginsDir', 'compile_dir' => 'CompileDir',
                                'cache_dir' => 'CacheDir',);
 

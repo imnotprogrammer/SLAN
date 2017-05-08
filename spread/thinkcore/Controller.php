@@ -5,7 +5,6 @@
  * 功能：主要定义MVC中C的基类,其子类继承该类时可以继承大量的优化方法。
  */
 namespace spread\thinkcore;
-
      class Controller{
          /**
           * @var \Smarty
@@ -17,22 +16,9 @@ namespace spread\thinkcore;
           *配置smarty的相关信息
           */
          public function __construct(){
-			$smartyinfo = conf::getOne("base","smarty");
-			$this->smarty_status = $smartyinfo['status'];
-			if($this->smarty_status===true){
-				require_once(WEB_ROOT."/spread/smarty/libs/Smarty.class.php");
-				$this->smarty = new \smarty();
-				$setconf = $smartyinfo['setconf'];
-				$this->smarty->setTemplateDir($setconf['templatedir'])
-							 ->setCompileDir($setconf['compiledir'])
-							 ->setPluginsDir($setconf['pluginsdir'])
-							 ->setCacheDir($setconf['cachedir'])
-							 ->setConfigDir($setconf['configdir']);
-				$this->smarty->caching = $setconf['caching'];
-				$this->smarty->cache_lifetime  = $setconf['cache_lifetime'];
-				$this->smarty->left_delimiter  = $setconf['left_delimiter'];
-				$this->smarty->right_delimiter = $setconf['right_delimiter'];				
-			}	 
+			 $this->smarty = SLAN::$app->smarty;
+			 $this->smarty->init();
+ 
          }
 
          /**

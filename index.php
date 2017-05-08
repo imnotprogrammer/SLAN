@@ -6,15 +6,30 @@
  * 邮箱：lanshiqingfeng@163.com
  */
     use spread\thinkcore\conf;
-		
-    ini_set('date.timezone','Etc/GMT-8');
-    defined("WEB_ROOT") or define("WEB_ROOT", __DIR__);   
-    defined('DEBUG') or define('DEBUG', true);    
-    require(WEB_ROOT.'/spread/thinkcore/NewThink.php'); //自动加载和初始化
-    require(WEB_ROOT.'/common/common.php');
-    require(WEB_ROOT.'/config/define.php');
-    
-	spread\thinkcore\app::run(); 
+	defined('DEBUG') or define('DEBUG', true);
+	defined('WEB_ROOT') or define('WEB_ROOT', __DIR__);	
+    /* $config = [
+		     'smarty' => array(
+			    'class'=>'spread\smarty\libs\Basesmarty',
+				'status' => true, //smarty模板引擎是否启动，true表示启动，false表示关闭，默认为on开启			
+				'template_dir' => WEB_ROOT.'/views',
+				'compile_dir' => WEB_ROOT.'/spread/smarty/template_c',
+				'plugins_dir' => WEB_ROOT.'/spread/smarty/plugins',
+				'cache_dir' => WEB_ROOT.'/spread/smarty/cache',
+				'config_dir' => WEB_ROOT.'/spread/smarty/config',
+				'caching' => false,
+				'cache_lifetime'=> 60*60*24,
+				'left_delimiter'=>'{',
+				'right_delimiter'=>'}'
+		    ),
+            'route'=>[
+			    'routeway' => 'r',
+				'routedefaultpath'=>'test/index'
+			]			
+        ]; */
+	$config = require_once(WEB_ROOT.'/config/base.php');
+	require(WEB_ROOT.'/spread/thinkcore/Auto_load.php');
+	(new spread\thinkcore\Application($config))->run();
 
 
 

@@ -15,7 +15,11 @@ class Db {
      * @var 连接字符串
      */
     public   $dsn = '';
-
+    /*
+	*数据库地址
+	*/
+	protected $db_host;
+	protected $db_name;
     /**
      * @var 数据库用户名
      */
@@ -71,6 +75,26 @@ class Db {
      * @param $db_charsert
      */
     public function __construct($conf=null){
+		/* if($conf){
+			$this->dsn .= 'mysql:';
+			$this->dsn .= 'host='.$conf['db_host'];
+			$this->dsn .= ';dbname='.$conf['db_name'];
+			$this->dsn .= ';charset='.$conf['db_charset'];
+			$this->db_user = $conf['db_user'];
+			$this->db_pass = $conf['db_pass'];			
+		}else{
+			
+			
+			
+		}
+        
+        try{
+            $this->pdo = new PDO($this->dsn,$this->db_user,$this->db_pass);			
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        } */
+    }
+    public function init($conf=null){
 		if($conf){
 			$this->dsn .= 'mysql:';
 			$this->dsn .= 'host='.$conf['db_host'];
@@ -79,22 +103,21 @@ class Db {
 			$this->db_user = $conf['db_user'];
 			$this->db_pass = $conf['db_pass'];			
 		}else{
-			$conf = conf::getConf('db');
 			$this->dsn .= 'mysql:';
-			$this->dsn .= 'host='.$conf['db_host'];
-			$this->dsn .= ';dbname='.$conf['db_name'];
-			$this->dsn .= ';charset='.$conf['db_charset'];
-			$this->db_user = $conf['db_user'];
-			$this->db_pass = $conf['db_pass'];
+			$this->dsn .= 'host='.$this->db_host;
+			$this->dsn .= ';dbname='.$this->db_name;
+			$this->dsn .= ';charset='.$this->db_charset;
+			$this->db_user = $this->db_user;
+			$this->db_pass = $this->db_pass;	
 		}
-        
-        try{
-            $this->pdo = new PDO($this->dsn,$this->db_user,$this->db_pass);			
-        }catch(PDOException $e){
-            echo $e->getMessage();
-        }
-    }
-
+			
+		try{
+			$this->pdo = new PDO($this->dsn,$this->db_user,$this->db_pass);	
+        return $this;			
+		}catch(PDOException $e){
+			echo $e->getMessage();
+		}
+	}
     /**
      * @param $tbname
      * @param $data
@@ -284,6 +307,10 @@ class Db {
 	}
 	public static function start(){
 		return new Db();
+	}
+	public function __set($key, $val){
+		$this->$key = $val;
+		
 	}
 }
 ?>
